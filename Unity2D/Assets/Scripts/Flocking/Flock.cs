@@ -50,7 +50,7 @@ public class Flock
   [HideInInspector]
   public List<Autonomous> mAutonomous = new List<Autonomous>();
 
-  public Flock()
-  {
+  public Flock(){
+
   }
 }
