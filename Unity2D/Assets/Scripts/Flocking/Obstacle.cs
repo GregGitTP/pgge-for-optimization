@@ -5,11 +5,11 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
   public float AvoidanceRadiusMultFactor = 1.5f;
-  public float AvoidanceRadius
+  public float SqrAvoidanceRadius
   {
     get
     {
-      return mCollider.radius * 3 * AvoidanceRadiusMultFactor;
+      return (mCollider.radius * 3 * AvoidanceRadiusMultFactor) * (mCollider.radius * 3 * AvoidanceRadiusMultFactor);
     }
   }
 

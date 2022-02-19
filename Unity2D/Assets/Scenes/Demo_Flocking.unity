@@ -1238,12 +1238,12 @@ MonoBehaviour:
   - {fileID: 281999220}
   - {fileID: 1148214724}
   Bounds: {fileID: 735960364}
-  TickDuration: 1
+  TickDuration: 0.1
   TickDurationSeparationEnemy: 0.01
   TickDurationRandom: 1
   BoidIncr: 100
   useFlocking: 1
-  BatchSize: 200
+  BatchSize: 50
   flocks:
   - PrefabBoid: {fileID: 1138522166324048232, guid: 1b7bb4e6c0d12884c97216ff0bcde98f, type: 3}
     name: Boids
