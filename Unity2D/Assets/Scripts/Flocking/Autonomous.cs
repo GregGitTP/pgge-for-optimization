@@ -18,7 +18,6 @@ public class Autonomous : MonoBehaviour
 
   public SpriteRenderer spriteRenderer;
 
-  // Start is called before the first frame update
   void Start()
   {
     Vector2 dir = new Vector2(Mathf.Cos(Mathf.Deg2Rad * 30f), Mathf.Sin(Mathf.Deg2Rad * 30f));
@@ -26,7 +25,7 @@ public class Autonomous : MonoBehaviour
     TargetDirection = dir;
   }
 
-  // Update is called once per frame
+  // Removed any redundant code thats not being used
   public void Update()
   {
     Vector3 targetDirection = TargetDirection;

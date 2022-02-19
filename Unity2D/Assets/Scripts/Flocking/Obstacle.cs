@@ -5,6 +5,9 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
   public float AvoidanceRadiusMultFactor = 1.5f;
+
+  // Squared the avoidance radius to be used for
+  // expensive distance comparisons
   public float SqrAvoidanceRadius
   {
     get

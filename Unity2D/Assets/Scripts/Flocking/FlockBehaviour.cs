@@ -5,11 +5,15 @@ using UnityEngine.EventSystems;
 
 public class FlockBehaviour : MonoBehaviour
 {
+  // An object to store the boids autonomous and its respective flock in one variable
   struct Boid{
     public Flock BoidFlock;
     public Autonomous BoidAutono;
   }
 
+
+  // Changed lists to arrays where possible for
+  // more efficient usage
   [SerializeField]
   GameObject[] Obstacles;
 
@@ -29,15 +33,16 @@ public class FlockBehaviour : MonoBehaviour
 
   public Flock[] flocks;
 
-  List<Boid> predators;
+  // List to store the required components of the predators and non predators
   List<Boid> nonPredators;
+  List<Autonomous> predators;
 
   void Awake(){
     mObstacles = new Obstacle[Obstacles.Length];
     mObstAutono = new Autonomous[Obstacles.Length];
 
-    predators = new List<Boid>();
     nonPredators = new List<Boid>();
+    predators = new List<Autonomous>();
   }
 
   void Start()
@@ -119,19 +124,25 @@ public class FlockBehaviour : MonoBehaviour
     GameObject obj = Instantiate(flock.PrefabBoid);
     obj.name = "Boid_" + flock.name + "_" + flock.mAutonomous.Count;
     obj.transform.position = new Vector3(x, y, 0.0f);
+
     Autonomous boid = obj.GetComponent<Autonomous>();
     flock.mAutonomous.Add(boid);
+
     boid.MaxSpeed = flock.maxSpeed;
     boid.RotationSpeed = flock.maxRotationSpeed;
 
+    // Adding the boid to either the predator or non predator list
     if(flock.isPredator){
-      predators.Add(new Boid{BoidFlock = flock, BoidAutono = boid});
+      predators.Add(boid);
     }
     else{
       nonPredators.Add(new Boid{BoidFlock = flock, BoidAutono = boid});
     }
   }
 
+  // Rearranged and refactored code to be more organized 
+  // while maintining the original function
+  // removed any redudant variables and code
   void Execute(Flock flock, int i)
   {
     Autonomous curr = flock.mAutonomous[i];
@@ -204,7 +215,8 @@ public class FlockBehaviour : MonoBehaviour
     curr.TargetDirection = alignment + seperation + cohesion;
   }
 
-
+  // Replaced for each loop with for loop instead
+  // and refactored to be more readable
   IEnumerator Coroutine_Flocking()
   {
     while (true)
@@ -225,6 +237,8 @@ public class FlockBehaviour : MonoBehaviour
     }
   }
 
+  // Removed the creation of unneccassary lists
+  // and used for loops instead of foreach loops
   IEnumerator Coroutine_SeparationWithEnemies()
   {
     while (true)
@@ -234,7 +248,7 @@ public class FlockBehaviour : MonoBehaviour
         float sqrSepDist = nonPredators[a].BoidFlock.enemySeparationDistance * nonPredators[a].BoidFlock.enemySeparationDistance;
 
         for(int b = 0; b < predators.Count; ++b){
-          Autonomous enemy = nonPredators[b].BoidAutono;
+          Autonomous enemy = predators[b];
 
           float sqrDist = (
             enemy.transform.position -
@@ -260,6 +274,9 @@ public class FlockBehaviour : MonoBehaviour
     }
   }
 
+  // Refactored to be neater
+  // and replaced foreach loops with for loops
+  // modified the update rate of the function
   IEnumerator Coroutine_AvoidObstacles()
   {
     while (true)
@@ -290,9 +307,13 @@ public class FlockBehaviour : MonoBehaviour
           }
         }
       }
-      yield return new WaitForSeconds(.2f);
+      yield return new WaitForSeconds(.5f);
     }
   }
+
+  // Refactored to be neater
+  // and replaced foreach loops with for loops
+  // modified the update rate of the function
   IEnumerator Coroutine_Random_Motion_Obstacles()
   {
     while (true)
@@ -324,6 +345,9 @@ public class FlockBehaviour : MonoBehaviour
       yield return new WaitForSeconds(2f);
     }
   }
+
+  // Refactored to be neater
+  // and replaced foreach loops with for loops
   IEnumerator Coroutine_Random()
   {
     while (true)
@@ -361,6 +385,9 @@ public class FlockBehaviour : MonoBehaviour
       yield return new WaitForSeconds(TickDurationRandom);
     }
   }
+
+  // Refactored to be more organized
+  // and modified the update rate of the function
   IEnumerator Rule_CrossBorder_Obstacles()
   {
     for(;;){
@@ -387,10 +414,12 @@ public class FlockBehaviour : MonoBehaviour
         }
         autono.transform.position = pos;
       }
-      yield return new WaitForSeconds(1f);
+      yield return new WaitForSeconds(2f);
     }
   }
 
+  // Combined the if statements into a single for loop
+  // modified the update rate of the function
   IEnumerator Rule_CrossBorder()
   {
     for(;;){
@@ -444,7 +473,7 @@ public class FlockBehaviour : MonoBehaviour
           }
         }
       }
-      yield return new WaitForSeconds(.2f);
+      yield return new WaitForSeconds(.5f);
     }
   }
 }
